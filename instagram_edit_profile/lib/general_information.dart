@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:instagram_edit_profile/custom_text_field.dart';
 import 'package:instagram_edit_profile/profile_picture.dart';
 import 'package:instagram_edit_profile/title_text.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
+// ignore: must_be_immutable
 class GeneralInformation extends StatelessWidget {
-  const GeneralInformation({
+  GeneralInformation({
     Key key,
     @required double bgImageRadius,
     @required double inputFontSize,
@@ -14,6 +16,11 @@ class GeneralInformation extends StatelessWidget {
 
   final double _bgImageRadius;
   final double _inputFontSize;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final TextEditingController controller = TextEditingController();
+  String initialCountry = 'IN';
+  PhoneNumber number = PhoneNumber(isoCode: 'IN');
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +92,32 @@ class GeneralInformation extends StatelessWidget {
             inputFontSize: _inputFontSize,
             titleName: "Phone Number",
           ),
-          CustomTextField(
-            hintText: "Phone Number",
-            inputType: TextInputType.phone,
+          InternationalPhoneNumberInput(
+            onInputChanged: (PhoneNumber number) {
+              print(number.phoneNumber);
+            },
+            onInputValidated: (bool value) {
+              print(value);
+            },
+            ignoreBlank: false,
+            autoValidate: true,
+            selectorTextStyle: TextStyle(color: Colors.black),
+            initialValue: number,
+            textFieldController: controller,
+            inputBorder: InputBorder.none,
+            inputDecoration: InputDecoration(
+              hintText: "Phone Number",
+              border: InputBorder.none,
+            ),
           ),
+          /*Row(
+            children: <Widget>[
+              CustomTextField(
+                hintText: "Phone Number",
+                inputType: TextInputType.phone,
+              ),
+            ],
+          ),*/
           SizedBox(height: 15.0),
         ],
       ),
